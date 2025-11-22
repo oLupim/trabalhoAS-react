@@ -1,40 +1,44 @@
 {
-  "tasks": [
+  "produtos": [
     {
-      "id": "1",
-      "title": "Configurar o Projeto React",
-      "description": "Criar o projeto com `create-react-app` e instalar as dependências iniciais.",
-      "completed": true
+      "id": "101",
+      "nome": "Smartphone Ultra 5G",
+      "descricao": "O mais recente modelo com processador A15 e câmera tripla de 64MP.",
+      "preco": 3299.9,
+      "estoque": 12,
+      "urlImagem": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSpUOmKzsDFOu4yWS82Opp0A_c76Se0hZfmTxMfBVmsm7tPRfbhuhhOMfVq-mNwQIeLh2_APd87BfU6FeopzAUehf7T9d5s4_MOMBWN3UEBIhoKpSNQND2DodwuZ-0Vh2yt7OVyJg&usqp=CAc"
     },
     {
-      "id": "2",
-      "title": "Desenvolver o Componente TaskList",
-      "description": "Criar o componente para exibir a lista de tarefas, consumindo a API.",
-      "completed": true
+      "id": "102",
+      "nome": "Fone de Ouvido Sem Fio (ANC)",
+      "descricao": "Cancelamento ativo de ruído e até 30 horas de bateria.",
+      "preco": 499,
+      "estoque": 25,
+      "urlImagem": "data:image/jpeg;base64,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"
     },
     {
-      "id": "3",
-      "title": "Implementar a Funcionalidade de Adicionar Tarefa",
-      "description": "Adicionar um formulário para inserir novas tarefas e enviá-las para a API.",
-      "completed": true
+      "id": "103",
+      "nome": "Notebook Essencial Pro",
+      "descricao": "Ideal para estudos e trabalho, 16GB de RAM e SSD de 512GB.",
+      "preco": 4500.5,
+      "estoque": 5,
+      "urlImagem": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRNCkbgEULO3CD5b9jM1pwVKv6UvnXOwi9DKqoBAlZVLY6s5qIG6HndssSlySIots11r9kocu4X_JT2-dpysy5h5o22BKfQz7x8w2-aYPOnnUAaJyEdQWNYw5Cy5tb-f2JKYw&usqp=CAc"
     },
     {
-      "id": "4",
-      "title": "Adicionar Opção de Marcar como Concluída",
-      "description": "Implementar o `checkbox` para atualizar o status `completed` da tarefa via `PUT`.",
-      "completed": true
+      "id": "104",
+      "nome": "Mouse Gamer Óptico",
+      "descricao": "Design ergonômico, 12000 DPI e iluminação RGB customizável.",
+      "preco": 149.99,
+      "estoque": 0,
+      "urlImagem": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTu3bQNOQtYxz_O5Hz1BdZUATroWQLgPZYWAVKrCRmUipH-JUlkqb1rGK2xUVxL39mV4BujepuDBiRqjoE1DFdam363_ubaheu0ycGpbo3VXEK5rzoYdQen_J68cpjVxKtZVFYdYtk&usqp=CAc"
     },
     {
-      "id": "5",
-      "title": "Estilizar a Aplicação",
-      "description": "Aplicar estilos básicos (`CSS`) para melhorar a experiência do usuário.",
-      "completed": false
-    },
-    {
-      "id": "433f",
-      "title": "qwe",
-      "description": "qwe13",
-      "completed": true
+      "id": "81d5",
+      "nome": "jonas",
+      "descricao": "fsfgnyty",
+      "preco": 23,
+      "urlImagem": "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcTyONSJwqfuXtDHXMIgtZXP08vwtGefnnXMtKATggEnnvNdOc6WMbjI-0E6X0eLigWgQHsIbo_I_U-uSRrSsIyQS5mWwaPID_x52P8KqY3yKjVAnUbeAZE_lp__kPKLJRirha-IE29td6P2&s=19",
+      "estoque": 2424
     }
   ]
 }
