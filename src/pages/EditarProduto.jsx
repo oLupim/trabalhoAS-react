@@ -1,46 +1,52 @@
-// src/pages/EditarProduto.jsx
-import React, { useState, useRef, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect, memo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useProdutos } from '../context/ProdutoContext.jsx'; // Caminho corrigido com a extensão .jsx
+import { Loader2, ArrowLeft } from 'lucide-react';
 
-// ***********************************************
-// NOTA: Assumindo que você criou e importou o ProdutoContext
-// ***********************************************
-// Importe o hook do Contexto do Produto (para buscar e atualizar os dados)
-// import { useProdutos } from '../context/ProdutoContext';
-
-// Hook Simples de Exemplo para simular busca e atualização
-const useProdutosSimples = () => {
-    // Dados de exemplo (SUBSTITUA PELO SEU ProdutoContext REAL)
-    const mockProdutos = [
-        { id: '1', nome: 'Camiseta Básica', descricao: 'Algodão Pima, 100% orgânico.', preco: 89.90, estoque: 5, urlImagem: 'https://via.placeholder.com/800x600/6366f1/ffffff?text=Camiseta' },
-        { id: '2', nome: 'Notebook Gamer X300', descricao: 'Processador i9, 32GB RAM, RTX 4070.', preco: 8500.00, estoque: 1, urlImagem: 'https://via.placeholder.com/800x600/f59e0b/ffffff?text=Notebook' },
-    ];
-
-    const getProdutoById = (id) => mockProdutos.find(p => p.id === id); 
-    
-    // Função simulada de PUT
-    const updateProduto = async (id, data) => {
-        console.log(`Enviando PUT para a API (ID: ${id}) com dados:`, data);
-        // Simula o sucesso
-        return true; 
-    };
-    return { getProdutoById, updateProduto };
-};
-
+// Componente FormInput (Reutilizado do CadastroProduto)
+const FormInput = memo(({ label, name, type = 'text', value, onChange, inputRef, error }) => (
+    <div className="mb-4">
+        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+            {label}
+        </label>
+        <input
+            id={name}
+            name={name}
+            type={type}
+            ref={inputRef}
+            // Valor padrão para evitar problemas de valor indefinido
+            value={value || (type === 'number' ? '' : '')}
+            onChange={onChange}
+            className={`w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none 
+                ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'}
+            `}
+        />
+        {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+    </div>
+));
 
 const EditarProduto = () => {
-    const { id } = useParams(); // Captura o ID do produto a ser editado
+    const { id } = useParams(); // Obtém o ID da URL
     const navigate = useNavigate();
     
-    // Hooks de Contexto (substitua por useProdutos() do seu Context)
-    const { getProdutoById, updateProduto } = useProdutosSimples(); 
-
-    // 1. Estado para os dados do formulário
-    const [form, setForm] = useState(null); // Inicia como null para controlar o carregamento
-    const [loading, setLoading] = useState(true);
-    const [errors, setErrors] = useState({});
+    // Usando o hook do Contexto
+    const { getProdutoById, updateProduto, isLoading, error: contextError } = useProdutos(); 
     
-    // 2. Referências para os campos
+    // Busca o produto pelo ID (se não for encontrado, ele é null/undefined)
+    const produtoExistente = getProdutoById(id);
+
+    const [form, setForm] = useState({
+        nome: '',
+        descricao: '',
+        preco: '',
+        urlImagem: '',
+        estoque: '',
+    });
+    
+    const [errors, setErrors] = useState({});
+    const [message, setMessage] = useState(null);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
+
     const inputRefs = {
         nome: useRef(null),
         descricao: useRef(null),
@@ -49,25 +55,56 @@ const EditarProduto = () => {
         estoque: useRef(null),
     };
 
-    // 3. Efeito para carregar os dados iniciais
+    // Efeito para carregar os dados do produto no formulário
     useEffect(() => {
-        const produto = getProdutoById(id);
-        if (produto) {
-             // Preenche o formulário com os dados existentes, convertendo números para strings para o input
+        if (produtoExistente) {
             setForm({
-                nome: produto.nome,
-                descricao: produto.descricao,
-                preco: produto.preco.toString(),
-                urlImagem: produto.urlImagem,
-                estoque: produto.estoque.toString(),
+                nome: produtoExistente.nome || '',
+                descricao: produtoExistente.descricao || '',
+                // Converte números para string para o input type="number"
+                preco: String(produtoExistente.preco) || '', 
+                urlImagem: produtoExistente.urlImagem || '',
+                estoque: String(produtoExistente.estoque) || '',
             });
-            setLoading(false);
-        } else {
-            // Se não encontrar, redireciona para uma 404 ou Home
-            alert("Produto não encontrado para edição.");
-            navigate('/'); 
+            setIsInitialLoad(false);
         }
-    }, [id, navigate, getProdutoById]);
+    }, [produtoExistente]);
+
+    // Efeito para esconder a mensagem após 5 segundos
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => setMessage(null), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
+
+
+    // Se o produto não for encontrado após a tentativa de busca, redireciona ou mostra erro.
+    if (!produtoExistente && !isLoading && !isInitialLoad) {
+        return (
+            <div className="container mx-auto p-8 text-center min-h-[80vh] flex flex-col justify-center items-center">
+                <h1 className="text-4xl text-red-500 font-bold mb-4">🚫 Produto Não Encontrado</h1>
+                <p className="text-lg text-gray-600 mb-8">O ID "{id}" não corresponde a nenhum item em estoque para edição.</p>
+                <button
+                    onClick={() => navigate('/')}
+                    className="flex items-center bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300"
+                >
+                    <ArrowLeft className="w-5 h-5 mr-2" />
+                    Voltar à Lista
+                </button>
+            </div>
+        );
+    }
+    
+    // Se o contexto está carregando ou é o carregamento inicial, exibe o loading
+    if (isLoading || isInitialLoad) {
+        return (
+            <div className="flex justify-center items-center min-h-[80vh]">
+                <Loader2 className="w-8 h-8 animate-spin text-indigo-600 mr-2" />
+                <span className="text-lg text-indigo-600">A carregar detalhes do produto...</span>
+            </div>
+        );
+    }
 
 
     const handleChange = (e) => {
@@ -76,7 +113,6 @@ const EditarProduto = () => {
         setErrors(prev => ({ ...prev, [name]: '' }));
     };
 
-    // Função de Validação (Requisito 4.1 - Reutilizada do Cadastro)
     const validate = () => {
         let newErrors = {};
         let isValid = true;
@@ -84,20 +120,22 @@ const EditarProduto = () => {
 
         if (!form.nome.trim()) { newErrors.nome = 'Nome é obrigatório.'; isValid = false; }
         if (!form.descricao.trim()) { newErrors.descricao = 'Descrição é obrigatória.'; isValid = false; }
-        if (!form.urlImagem.trim()) { newErrors.urlImagem = 'URL da Imagem é obrigatória.'; isValid = false; }
+        if (!form.urlImagem.trim()) { 
+             newErrors.urlImagem = 'URL da Imagem é obrigatória.'; 
+             isValid = false; 
+        } else if (!/^https?:\/\/.+/.test(form.urlImagem.trim())) {
+             newErrors.urlImagem = 'URL da Imagem inválida. Deve começar com http(s)://';
+             isValid = false;
+        }
 
         const precoNum = parseFloat(form.preco);
-        if (form.preco === '' || isNaN(precoNum)) {
-            newErrors.preco = 'Preço deve ser um número válido.'; isValid = false;
-        } else if (precoNum < 0) {
-            newErrors.preco = 'Preço deve ser maior ou igual a zero.'; isValid = false;
+        if (form.preco === '' || isNaN(precoNum) || precoNum < 0) {
+            newErrors.preco = 'Preço deve ser um número válido (maior ou igual a zero).'; isValid = false;
         }
 
         const estoqueInt = parseInt(form.estoque);
-        if (form.estoque === '' || isNaN(estoqueInt)) {
-            newErrors.estoque = 'Estoque deve ser um número inteiro válido.'; isValid = false;
-        } else if (estoqueInt < 0) {
-            newErrors.estoque = 'Estoque deve ser maior ou igual a zero.'; isValid = false;
+        if (form.estoque === '' || isNaN(estoqueInt) || estoqueInt < 0) {
+            newErrors.estoque = 'Estoque deve ser um número inteiro válido (maior ou igual a zero).'; isValid = false;
         }
 
         for (const key in newErrors) {
@@ -118,61 +156,52 @@ const EditarProduto = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isLoading) return; // Previne múltiplos submits
 
         if (validate()) {
-            const produtoParaAPI = {
+            const produtoAtualizado = {
                 ...form,
                 preco: parseFloat(form.preco),
                 estoque: parseInt(form.estoque),
             };
 
-            const success = await updateProduto(id, produtoParaAPI);
+            try {
+                // Chama a função de atualização do contexto
+                const success = await updateProduto(id, produtoAtualizado);
 
-            if (success) {
-                alert("Produto atualizado com sucesso!");
-                // Redirecionar para os detalhes após a atualização
-                navigate(`/produto/${id}`);
-            } else {
-                alert("Falha ao atualizar produto. Verifique a conexão com a API.");
+                if (success) {
+                    setMessage({ type: 'success', text: 'Produto atualizado com sucesso! A redirecionar...' });
+                    setTimeout(() => navigate(`/produto/${id}`), 1500);
+                } else {
+                    // O erro já foi definido dentro do contexto, mas pode ser exibido aqui também.
+                    setMessage({ type: 'error', text: 'Falha ao atualizar produto. Verifique a conexão com o servidor.' });
+                }
+            } catch (error) {
+                setMessage({ type: 'error', text: 'Erro inesperado durante a atualização.' });
+                console.error("Erro na atualização:", error);
             }
         }
     };
 
-    // Componente auxiliar de Input (reutilizado do CadastroProduto)
-    const FormInput = ({ label, name, type = 'text', inputRef, error }) => (
-        <div className="mb-4">
-            <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-                {label}
-            </label>
-            <input
-                id={name}
-                name={name}
-                type={type}
-                ref={inputRef}
-                value={form?.[name] || ''} // Usa optional chaining e valor padrão
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none 
-                    ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'}
-                `}
-            />
-            {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
-        </div>
-    );
-    
-    if (loading || form === null) {
+    const MessageNotification = () => {
+        if (!message) return null;
+        
+        const baseClasses = "fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-xl z-50 text-white font-semibold transition-opacity duration-300";
+        const successClasses = "bg-green-500";
+        const errorClasses = "bg-red-500";
+
         return (
-             <div className="flex justify-center items-center h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-                <p className="ml-4 text-gray-700">Carregando dados do produto...</p>
+            <div className={`${baseClasses} ${message.type === 'success' ? successClasses : errorClasses}`}>
+                {message.text}
             </div>
         );
-    }
-
+    };
 
     return (
         <div className="container mx-auto p-4 sm:p-6 lg:p-8 min-h-[80vh]">
+            <MessageNotification />
             <h1 className="text-4xl font-bold text-gray-800 mb-8 border-b-2 border-indigo-500 pb-2">
-                Editar Produto: {form.nome} 📝
+                Editar Produto: {produtoExistente.nome} <span className="text-indigo-600">#{id}</span>
             </h1>
 
             <form onSubmit={handleSubmit} className="max-w-xl mx-auto bg-white p-8 rounded-xl shadow-2xl">
@@ -180,6 +209,8 @@ const EditarProduto = () => {
                 <FormInput 
                     label="Nome do Produto" 
                     name="nome" 
+                    value={form.nome}
+                    onChange={handleChange}
                     inputRef={inputRefs.nome} 
                     error={errors.nome} 
                 />
@@ -206,6 +237,8 @@ const EditarProduto = () => {
                     label="Preço (R$)" 
                     name="preco" 
                     type="number" 
+                    value={form.preco}
+                    onChange={handleChange}
                     inputRef={inputRefs.preco} 
                     error={errors.preco} 
                 />
@@ -214,6 +247,8 @@ const EditarProduto = () => {
                     label="Estoque" 
                     name="estoque" 
                     type="number" 
+                    value={form.estoque}
+                    onChange={handleChange}
                     inputRef={inputRefs.estoque} 
                     error={errors.estoque} 
                 />
@@ -221,23 +256,37 @@ const EditarProduto = () => {
                 <FormInput 
                     label="URL da Imagem" 
                     name="urlImagem" 
+                    value={form.urlImagem}
+                    onChange={handleChange}
                     inputRef={inputRefs.urlImagem} 
                     error={errors.urlImagem} 
                 />
                 
                 <button
                     type="submit"
-                    className="w-full mt-6 py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 transform hover:scale-[1.01]"
+                    disabled={isLoading}
+                    className={`w-full mt-6 py-3 text-white font-bold rounded-lg shadow-md transition duration-300 ${
+                        isLoading 
+                            ? 'bg-gray-400 cursor-not-allowed' 
+                            : 'bg-indigo-600 hover:bg-indigo-700 transform hover:scale-[1.01]'
+                    }`}
                 >
-                    Salvar Alterações
+                    {isLoading ? (
+                        <span className="flex items-center justify-center">
+                            <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                            A Atualizar...
+                        </span>
+                    ) : (
+                        'Salvar Alterações'
+                    )}
                 </button>
                 
                 <button
                     type="button"
                     onClick={() => navigate(`/produto/${id}`)}
-                    className="w-full mt-3 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition duration-300"
+                    className="w-full mt-3 py-3 text-indigo-600 bg-gray-100 border border-indigo-600 font-bold rounded-lg shadow-md transition duration-300 hover:bg-gray-200"
                 >
-                    Cancelar
+                    Cancelar e Voltar
                 </button>
             </form>
         </div>
