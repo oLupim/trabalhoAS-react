@@ -1,0 +1,58 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Configurar o Projeto React",
+      "description": "Criar o projeto com `create-react-app` e instalar as dependências iniciais.",
+      "completed": true
+    },
+    {
+      "id": "2",
+      "title": "Desenvolver o Componente TaskList",
+      "description": "Criar o componente para exibir a lista de tarefas, consumindo a API.",
+      "completed": true
+    },
+    {
+      "id": "3",
+      "title": "Implementar a Funcionalidade de Adicionar Tarefa",
+      "description": "Adicionar um formulário para inserir novas tarefas e enviá-las para a API.",
+      "completed": true
+    },
+    {
+      "id": "4",
+      "title": "Adicionar Opção de Marcar como Concluída",
+      "description": "Implementar o `checkbox` para atualizar o status `completed` da tarefa via `PUT`.",
+      "completed": true
+    },
+    {
+      "id": "5",
+      "title": "Estilizar a Aplicação",
+      "description": "Aplicar estilos básicos (`CSS`) para melhorar a experiência do usuário.",
+      "completed": true
+    },
+    {
+      "id": "433f",
+      "title": "qwe",
+      "description": "qwe13",
+      "completed": true
+    },
+    {
+      "id": "02c0",
+      "title": "12312312",
+      "description": "123qwasd",
+      "completed": true
+    },
+    {
+      "id": "4561",
+      "title": "teste2",
+      "description": "teste2",
+      "completed": false
+    },
+    {
+      "id": "ebb2",
+      "title": "jonas",
+      "description": "jonasfut",
+      "completed": true
+    }
+  ]
+}
