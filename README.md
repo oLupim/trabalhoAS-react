@@ -1,3 +1,9 @@
+passo a passo para rodar em um terminal rode 
+npm run dev
+
+em outro terminal rode:
+npx json-server --watch db.json --port 3001
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
