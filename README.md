@@ -36,24 +36,24 @@ npm run dev
 
 ✨ Funcionalidades
 
-📦 Listagem de produtos com imagem, nome, preço e estoque.
-🔍 Visualização de detalhes de cada produto.
-🛒 Carrinho de compras com:
--Aumentar/diminuir quantidade
--Remover item
--Validação de estoque
--Total geral
-➕ Cadastro de novos produtos.
-✏️ Edição e exclusão de produtos existentes.
-🌐 Navegação completa com React Router.
-💾 Consumo de API com JSON Server.
-🎨 Estilização com Tailwind responsiva e moderna.
+📦 Listagem de produtos com imagem, nome, preço e estoque. 
+🔍 Visualização de detalhes de cada produto. 
+🛒 Carrinho de compras com: 
+-Aumentar/diminuir quantidade 
+-Remover item 
+-Validação de estoque 
+-Total geral 
+➕ Cadastro de novos produtos. 
+✏️ Edição e exclusão de produtos existentes. 
+🌐 Navegação completa com React Router. 
+💾 Consumo de API com JSON Server. 
+🎨 Estilização com Tailwind responsiva e moderna. 
 
 
-📦 Dependências Principais
+📦 Dependências Principais 
 
-React
-react-router-dom
-TailwindCSS
-JSON Server
-Hooks (useState, useEffect, useContext, useRef, useParams, useNavigate)
+React 
+react-router-dom 
+TailwindCSS 
+JSON Server 
+Hooks (useState, useEffect, useContext, useRef, useParams, useNavigate) 
