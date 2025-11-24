@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useProdutos } from '../context/ProdutoContext.jsx'; // **CORRIGIDO: O .jsx foi adicionado para resolver o erro de importação**
-import { Package, DollarSign, Archive, ArrowLeft, Loader2, Trash2, Edit } from 'lucide-react';
+import { useCarrinho } from '../context/CarrinhoContext.jsx';
+import { Package, DollarSign, Archive, ArrowLeft, Loader2, Trash2, Edit, ShoppingCart } from 'lucide-react';
 
 // Função para formatar o preço
 const formatarPreco = (preco) => {
@@ -18,6 +19,9 @@ const DetalhesProduto = () => {
     // Acesso aos estados e funções do Contexto de Produtos
     const { getProdutoById, deleteProduto, isLoading, error } = useProdutos();
     
+    // Acesso aos estados e funções do Contexto do Carrinho
+    const { adicionarAoCarrinho } = useCarrinho();
+    
     // Busca o produto no estado global
     const produto = getProdutoById(id);
 
@@ -25,6 +29,8 @@ const DetalhesProduto = () => {
     const [isDeleting, setIsDeleting] = useState(false);
     // Estado local para mensagens (Feedback de sucesso/erro)
     const [message, setMessage] = useState(null);
+    // Estado local para quantidade desejada
+    const [quantidade, setQuantidade] = useState(1);
 
     // Função para deletar um produto
     const handleDelete = async () => {
@@ -43,6 +49,34 @@ const DetalhesProduto = () => {
                 setMessage({ type: 'error', text: 'Falha ao deletar produto. Verifique a conexão com a API.' });
             }
             setIsDeleting(false);
+        }
+    };
+
+    // Função para adicionar o produto ao carrinho
+    const handleAdicionarAoCarrinho = () => {
+        const success = adicionarAoCarrinho(produto, quantidade);
+        
+        if (success) {
+            setMessage({ type: 'success', text: `✓ ${quantidade} unidade(s) adicionada(s) ao carrinho!` });
+            setQuantidade(1); // Reseta a quantidade após adicionar
+            setTimeout(() => setMessage(null), 3000); // Remove a mensagem após 3 segundos
+        } else {
+            setMessage({ type: 'error', text: 'Quantidade solicitada excede o estoque disponível.' });
+            setTimeout(() => setMessage(null), 3000);
+        }
+    };
+
+    // Função para incrementar a quantidade
+    const handleIncrementarQuantidade = () => {
+        if (quantidade < produto.estoque) {
+            setQuantidade(quantidade + 1);
+        }
+    };
+
+    // Função para decrementar a quantidade
+    const handleDecrementarQuantidade = () => {
+        if (quantidade > 1) {
+            setQuantidade(quantidade - 1);
         }
     };
     
@@ -181,6 +215,59 @@ const DetalhesProduto = () => {
                     <p className="text-gray-600 leading-relaxed">
                         {produto.descricao}
                     </p>
+
+                    {/* Seção de Carrinho */}
+                    <div className="mt-8 pt-8 border-t">
+                        {produto.estoque > 0 ? (
+                            <div className="space-y-4">
+                                {/* Seletor de Quantidade */}
+                                <div className="flex items-center space-x-4">
+                                    <span className="font-semibold text-gray-700">Quantidade:</span>
+                                    <div className="flex items-center border border-gray-300 rounded-lg">
+                                        <button
+                                            onClick={handleDecrementarQuantidade}
+                                            className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition"
+                                            disabled={quantidade === 1}
+                                        >
+                                            −
+                                        </button>
+                                        <input
+                                            type="number"
+                                            value={quantidade}
+                                            onChange={(e) => {
+                                                const val = Math.max(1, Math.min(produto.estoque, parseInt(e.target.value) || 1));
+                                                setQuantidade(val);
+                                            }}
+                                            className="w-16 text-center border-l border-r border-gray-300 py-2 focus:outline-none"
+                                            min="1"
+                                            max={produto.estoque}
+                                        />
+                                        <button
+                                            onClick={handleIncrementarQuantidade}
+                                            className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition"
+                                            disabled={quantidade === produto.estoque}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Botão Adicionar ao Carrinho */}
+                                <button
+                                    onClick={handleAdicionarAoCarrinho}
+                                    className="w-full flex items-center justify-center bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-lg"
+                                >
+                                    <ShoppingCart className="w-5 h-5 mr-2" />
+                                    Adicionar ao Carrinho
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                                <p className="text-red-700 font-semibold">Produto Indisponível</p>
+                                <p className="text-red-600 text-sm">Este produto está fora de estoque no momento.</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
             </div>
