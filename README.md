@@ -7,91 +7,53 @@ Este é um projeto de um pequeno e-commerce desenvolvido em React, utilizando Re
 Para executar este projeto localmente, siga os passos abaixo:
 
 1️⃣ Clone o repositório
-git clone https://github.com/seu-usuario/mini-ecommerce-react.git
+    ```bash
+git clone https://github.com/oLupim/trabalhoAS-react
+    ```
 
 2️⃣ Acesse o diretório do projeto
-cd mini-ecommerce-react
-
+    ```bash
+cd trabalhoAS-react
+    ```
+    
 3️⃣ Instale as dependências
+    ```bash
 npm install
-
+    ```
+    
 4️⃣ Configure o JSON Server
-
-Entre na pasta do servidor (se existir):
-
-cd server
-
-
-Crie o arquivo db.json com a estrutura mínima:
-
-{
-  "produtos": [
-    {
-      "id": 1,
-      "nome": "Produto 1",
-      "descricao": "Descrição do produto 1",
-      "preco": 99.9,
-      "imagem": "https://via.placeholder.com/150",
-      "estoque": 10
-    }
-  ]
-}
-
-
-Inicie o JSON Server:
-
+Inicie o JSON Server na pasta do projeto:
+    ```bash
 npx json-server --watch db.json --port 3001
-
+    ```
+    
 5️⃣ Rode o projeto React
-
-Volte para a pasta raiz, se necessário:
-
-cd ..
-
-
-Inicie o servidor React:
-
-npm start
+Inicie o servidor React em outro terminal:
+    ```bash
+npm run dev
+    ```
 
 
-A aplicação abrirá em:
-👉 http://localhost:3000
+✨ Funcionalidades
 
-📌 Funcionalidades
+📦 Listagem de produtos com imagem, nome, preço e estoque.
+🔍 Visualização de detalhes de cada produto.
+🛒 Carrinho de compras com:
+-Aumentar/diminuir quantidade
+-Remover item
+-Validação de estoque
+-Total geral
+➕ Cadastro de novos produtos.
+✏️ Edição e exclusão de produtos existentes.
+🌐 Navegação completa com React Router.
+💾 Consumo de API com JSON Server.
+🎨 Estilização com Tailwind responsiva e moderna.
 
-Listagem de produtos
-
-Detalhes do produto
-
-Carrinho com quantidade, remoção e total
-
-Validação de estoque
-
-Cadastro de produtos
-
-Edição de produtos
-
-Exclusão
-
-Navegação com react-router-dom
-
-Context API para carrinho
 
 📦 Dependências Principais
 
 React
-
 react-router-dom
-
 TailwindCSS
-
 JSON Server
-
 Hooks (useState, useEffect, useContext, useRef, useParams, useNavigate)
-
-▶️ Como Rodar o JSON Server Separadamente
-npx json-server --watch db.json --port 5000
-
-📝 Observação
-
-Se desejar, adicione outras seções como documentação, prints da tela ou vídeo explicativo.
