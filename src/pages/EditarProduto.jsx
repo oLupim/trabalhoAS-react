@@ -171,7 +171,7 @@ const EditarProduto = () => {
 
                 if (success) {
                     setMessage({ type: 'success', text: 'Produto atualizado com sucesso! A redirecionar...' });
-                    setTimeout(() => navigate(`/produto/${id}`), 1500);
+                    setTimeout(() => navigate('/'), 1500);
                 } else {
                     // O erro já foi definido dentro do contexto, mas pode ser exibido aqui também.
                     setMessage({ type: 'error', text: 'Falha ao atualizar produto. Verifique a conexão com o servidor.' });
