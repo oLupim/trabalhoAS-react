@@ -1,24 +1,18 @@
-// src/pages/Carrinho.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCarrinho } from '../context/CarrinhoContext';
 
-// Função para formatar o preço
 const formatarPreco = (preco) => {
-    // Garante que o preço seja tratado como número para evitar erros de formatação
     const numericPrice = parseFloat(preco);
     if (isNaN(numericPrice)) return 'R$ 0,00';
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numericPrice);
 };
 
-// Componente para exibir um item individual no carrinho
 const ItemCarrinho = ({ item }) => {
     const { aumentarQuantidade, diminuirQuantidade, removerDoCarrinho } = useCarrinho();
     
-    // Calcula o preço total do item
     const totalItem = item.preco * item.quantidade;
 
-    // Regras de bloqueio
     const podeAumentar = item.quantidade < item.estoque;
     const estoqueMaximoAtingido = item.quantidade >= item.estoque;
     const podeDiminuir = item.quantidade > 1;
@@ -26,7 +20,6 @@ const ItemCarrinho = ({ item }) => {
     return (
         <div className="flex items-center p-4 border-b border-gray-200 transition duration-150 hover:bg-gray-50">
             
-            {/* Imagem e Nome */}
             <div className="flex-shrink-0 w-16 h-16 mr-4">
                 <img 
                     src={item.urlImagem || 'https://via.placeholder.com/64'} 
@@ -44,7 +37,6 @@ const ItemCarrinho = ({ item }) => {
                 )}
             </div>
 
-            {/* Controles de Quantidade */}
             <div className="flex items-center space-x-2 mx-4">
                 <button
                     onClick={() => diminuirQuantidade(item.id)}
@@ -67,7 +59,6 @@ const ItemCarrinho = ({ item }) => {
                 </button>
             </div>
 
-            {/* Preço Total e Remover */}
             <div className="text-right w-32">
                 <p className="text-lg font-bold text-gray-900">{formatarPreco(totalItem)}</p>
                 <button
@@ -103,14 +94,12 @@ const Carrinho = () => {
             ) : (
                 <div className="flex flex-col lg:flex-row gap-8">
                     
-                    {/* Lista de Itens */}
                     <div className="lg:w-3/5 bg-white shadow-xl rounded-lg divide-y divide-gray-100">
                         {carrinho.map(item => (
                             <ItemCarrinho key={item.id} item={item} />
                         ))}
                     </div>
 
-                    {/* Resumo do Pedido */}
                     <div className="lg:w-2/5 sticky top-20 h-fit">
                         <div className="bg-gray-50 p-6 rounded-lg shadow-xl border border-gray-200">
                             <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">
@@ -121,7 +110,6 @@ const Carrinho = () => {
                                 <span>{formatarPreco(totalGeral)}</span>
                             </div>
                             <button
-                                // Adicione a lógica de "Finalizar Compra" aqui (opcional para o projeto)
                                 className="w-full py-3 mt-4 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition duration-300"
                             >
                                 Finalizar Pedido

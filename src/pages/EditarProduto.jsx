@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect, memo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useProdutos } from '../context/ProdutoContext.jsx'; // Caminho corrigido com a extensão .jsx
+import { useProdutos } from '../context/ProdutoContext.jsx';
 import { Loader2, ArrowLeft } from 'lucide-react';
 
-// Componente FormInput (Reutilizado do CadastroProduto)
 const FormInput = memo(({ label, name, type = 'text', value, onChange, inputRef, error }) => (
     <div className="mb-4">
         <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
@@ -14,7 +13,6 @@ const FormInput = memo(({ label, name, type = 'text', value, onChange, inputRef,
             name={name}
             type={type}
             ref={inputRef}
-            // Valor padrão para evitar problemas de valor indefinido
             value={value || (type === 'number' ? '' : '')}
             onChange={onChange}
             className={`w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none 
@@ -26,13 +24,11 @@ const FormInput = memo(({ label, name, type = 'text', value, onChange, inputRef,
 ));
 
 const EditarProduto = () => {
-    const { id } = useParams(); // Obtém o ID da URL
+    const { id } = useParams();
     const navigate = useNavigate();
     
-    // Usando o hook do Contexto
     const { getProdutoById, updateProduto, isLoading, error: contextError } = useProdutos(); 
     
-    // Busca o produto pelo ID (se não for encontrado, ele é null/undefined)
     const produtoExistente = getProdutoById(id);
 
     const [form, setForm] = useState({
@@ -55,13 +51,11 @@ const EditarProduto = () => {
         estoque: useRef(null),
     };
 
-    // Efeito para carregar os dados do produto no formulário
     useEffect(() => {
         if (produtoExistente) {
             setForm({
                 nome: produtoExistente.nome || '',
                 descricao: produtoExistente.descricao || '',
-                // Converte números para string para o input type="number"
                 preco: String(produtoExistente.preco) || '', 
                 urlImagem: produtoExistente.urlImagem || '',
                 estoque: String(produtoExistente.estoque) || '',
@@ -70,7 +64,6 @@ const EditarProduto = () => {
         }
     }, [produtoExistente]);
 
-    // Efeito para esconder a mensagem após 5 segundos
     useEffect(() => {
         if (message) {
             const timer = setTimeout(() => setMessage(null), 5000);
@@ -78,8 +71,6 @@ const EditarProduto = () => {
         }
     }, [message]);
 
-
-    // Se o produto não for encontrado após a tentativa de busca, redireciona ou mostra erro.
     if (!produtoExistente && !isLoading && !isInitialLoad) {
         return (
             <div className="container mx-auto p-8 text-center min-h-[80vh] flex flex-col justify-center items-center">
@@ -96,7 +87,6 @@ const EditarProduto = () => {
         );
     }
     
-    // Se o contexto está carregando ou é o carregamento inicial, exibe o loading
     if (isLoading || isInitialLoad) {
         return (
             <div className="flex justify-center items-center min-h-[80vh]">
@@ -156,7 +146,7 @@ const EditarProduto = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (isLoading) return; // Previne múltiplos submits
+        if (isLoading) return; 
 
         if (validate()) {
             const produtoAtualizado = {
@@ -166,14 +156,12 @@ const EditarProduto = () => {
             };
 
             try {
-                // Chama a função de atualização do contexto
                 const success = await updateProduto(id, produtoAtualizado);
 
                 if (success) {
                     setMessage({ type: 'success', text: 'Produto atualizado com sucesso! A redirecionar...' });
                     setTimeout(() => navigate(`/produto/${id}`), 1500);
                 } else {
-                    // O erro já foi definido dentro do contexto, mas pode ser exibido aqui também.
                     setMessage({ type: 'error', text: 'Falha ao atualizar produto. Verifique a conexão com o servidor.' });
                 }
             } catch (error) {

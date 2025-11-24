@@ -1,4 +1,3 @@
-// src/context/ProdutoContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const ProdutoContext = createContext();
@@ -12,7 +11,6 @@ export const ProdutoProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Buscar todos os produtos
     const fetchProdutos = async () => {
         setIsLoading(true);
         setError(null);
@@ -30,7 +28,6 @@ export const ProdutoProvider = ({ children }) => {
         }
     };
 
-    // Adicionar novo produto (POST)
     const addProduto = async (novoProduto) => {
         try {
             const res = await fetch(API_URL, {
@@ -48,13 +45,11 @@ export const ProdutoProvider = ({ children }) => {
         }
     };
 
-    // Buscar produto por id (compatível com id numérico/string)
     const getProdutoById = (id) => {
         if (!id) return undefined;
         return produtos.find(p => p.id?.toString() === id.toString());
     };
 
-    // Atualizar produto (PUT)
     const updateProduto = async (id, dadosAtualizados) => {
         try {
             const res = await fetch(`${API_URL}/${id}`, {
@@ -72,7 +67,6 @@ export const ProdutoProvider = ({ children }) => {
         }
     };
 
-    // Deletar produto
     const deleteProduto = async (id) => {
         try {
             const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });

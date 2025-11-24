@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProdutos } from '../context/ProdutoContext';
 
-// Componente FormInput movido para fora e usando memo para otimização
-// Isso impede a re-renderização desnecessária e resolve o bug de perda de foco.
 const FormInput = memo(({ label, name, type = 'text', value, onChange, inputRef, error }) => (
     <div className="mb-4">
         <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
@@ -14,7 +12,6 @@ const FormInput = memo(({ label, name, type = 'text', value, onChange, inputRef,
             name={name}
             type={type}
             ref={inputRef}
-            // Valor padrão para evitar problemas de valor indefinido
             value={value || (type === 'number' ? '' : '')}
             onChange={onChange}
             className={`w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none 
@@ -49,7 +46,6 @@ const CadastroProduto = () => {
         estoque: useRef(null),
     };
 
-    // Função para esconder a mensagem após 5 segundos
     useEffect(() => {
         if (message) {
             const timer = setTimeout(() => setMessage(null), 5000);

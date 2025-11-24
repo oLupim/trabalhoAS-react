@@ -1,8 +1,7 @@
-// src/pages/Home.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProdutoCard from '../components/ProdutoCard';
-import { useCarrinho } from '../context/CarrinhoContext'; // Importa o hook do carrinho
+import { useCarrinho } from '../context/CarrinhoContext';
 import { useProdutos } from '../context/ProdutoContext';
 
 const Home = () => {
@@ -11,15 +10,14 @@ const Home = () => {
     const [msgEstoque, setMsgEstoque] = useState('');
 
     const handleAdicionarCarrinho = (produto) => {
-        // Tenta adicionar 1 unidade ao carrinho
         const sucesso = adicionarAoCarrinho(produto, 1);
 
         if (!sucesso) {
             setMsgEstoque(`Estoque máximo do(a) ${produto.nome} atingido!`);
-            setTimeout(() => setMsgEstoque(''), 3000); // Limpa a mensagem após 3s
+            setTimeout(() => setMsgEstoque(''), 3000); 
         } else {
             setMsgEstoque(`"${produto.nome}" adicionado com sucesso!`);
-            setTimeout(() => setMsgEstoque(''), 2000); // Limpa a mensagem após 2s
+            setTimeout(() => setMsgEstoque(''), 2000); 
         }
     };
 
@@ -45,7 +43,6 @@ const Home = () => {
         <div className="container mx-auto p-4">
             <h1 className="text-4xl font-bold text-gray-800 mb-6">Lista de Produtos 🛍️</h1>
 
-            {/* Mensagem de Feedback (Estoque/Adicionado) */}
             {msgEstoque && (
                 <div className={`p-3 mb-4 rounded-lg text-center font-medium transition-opacity duration-500
                     ${msgEstoque.includes('atingido') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}
@@ -54,7 +51,6 @@ const Home = () => {
                 </div>
             )}
 
-            {/* Links obrigatórios */}
             <div className="flex space-x-4 mb-8">
                 <Link
                     to="/carrinho"
@@ -70,7 +66,6 @@ const Home = () => {
                 </Link>
             </div>
 
-            {/* Listagem Responsiva de Produtos */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {produtos.map((produto) => (
                     <ProdutoCard
