@@ -1,23 +1,97 @@
-passo a passo para rodar em um terminal rode 
-npm run dev
+Mini E-commerce com React + JSON Server
 
-em outro terminal rode:
+Este é um projeto de um pequeno e-commerce desenvolvido em React, utilizando React Router, Context API, hooks, JSON Server para simular uma API e TailwindCSS para estilização.
+
+⚙️ Instruções de Instalação e Execução
+
+Para executar este projeto localmente, siga os passos abaixo:
+
+1️⃣ Clone o repositório
+git clone https://github.com/seu-usuario/mini-ecommerce-react.git
+
+2️⃣ Acesse o diretório do projeto
+cd mini-ecommerce-react
+
+3️⃣ Instale as dependências
+npm install
+
+4️⃣ Configure o JSON Server
+
+Entre na pasta do servidor (se existir):
+
+cd server
+
+
+Crie o arquivo db.json com a estrutura mínima:
+
+{
+  "produtos": [
+    {
+      "id": 1,
+      "nome": "Produto 1",
+      "descricao": "Descrição do produto 1",
+      "preco": 99.9,
+      "imagem": "https://via.placeholder.com/150",
+      "estoque": 10
+    }
+  ]
+}
+
+
+Inicie o JSON Server:
+
 npx json-server --watch db.json --port 3001
 
-# React + Vite
+5️⃣ Rode o projeto React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Volte para a pasta raiz, se necessário:
 
-Currently, two official plugins are available:
+cd ..
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
+Inicie o servidor React:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+npm start
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# trabalhoAS-react
+A aplicação abrirá em:
+👉 http://localhost:3000
+
+📌 Funcionalidades
+
+Listagem de produtos
+
+Detalhes do produto
+
+Carrinho com quantidade, remoção e total
+
+Validação de estoque
+
+Cadastro de produtos
+
+Edição de produtos
+
+Exclusão
+
+Navegação com react-router-dom
+
+Context API para carrinho
+
+📦 Dependências Principais
+
+React
+
+react-router-dom
+
+TailwindCSS
+
+JSON Server
+
+Hooks (useState, useEffect, useContext, useRef, useParams, useNavigate)
+
+▶️ Como Rodar o JSON Server Separadamente
+npx json-server --watch db.json --port 5000
+
+📝 Observação
+
+Se desejar, adicione outras seções como documentação, prints da tela ou vídeo explicativo.
