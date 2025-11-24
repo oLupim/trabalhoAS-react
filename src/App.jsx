@@ -57,7 +57,7 @@ const Footer = () => (
   <footer className="bg-gray-800 text-white mt-8 py-4">
     <div className="container mx-auto px-4 text-center text-sm">
       <p>&copy; {new Date().getFullYear()} ULBRA - Desenvolvimento de Aplicação Orientada a Componentes</p>
-      <p>Projeto de Avaliação Prática AS por Jonas Santos</p>
+      <p>Projeto de Avaliação Prática AS por Jonas Santos e Gustavo Lupim</p>
     </div>
   </footer>
 );
