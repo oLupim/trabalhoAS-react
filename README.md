@@ -7,17 +7,17 @@ Este é um projeto de um pequeno e-commerce desenvolvido em React, utilizando Re
 Para executar este projeto localmente, siga os passos abaixo:
 
 1️⃣ Clone o repositório:
-    ```bash
+    ```
     git clone https://github.com/oLupim/trabalhoAS-react
     ```
 
 2️⃣ Acesse o diretório do projeto
-    ```bash
+    ```
 cd trabalhoAS-react
     ```
     
 3️⃣ Instale as dependências
-    ```bash
+    ```
 npm install
     ```
     
