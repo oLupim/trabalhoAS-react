@@ -23,13 +23,13 @@ npm install
     
 4️⃣ Configure o JSON Server
 Inicie o JSON Server na pasta do projeto:
-    ```bash
+    ```
 npx json-server --watch db.json --port 3001
     ```
     
 5️⃣ Rode o projeto React
 Inicie o servidor React em outro terminal:
-    ```bash
+    ```
 npm run dev
     ```
 
