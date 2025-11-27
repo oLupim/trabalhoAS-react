@@ -57,3 +57,7 @@ react-router-dom
 TailwindCSS  
 JSON Server  
 Hooks (useState, useEffect, useContext, useRef, useParams, useNavigate)  
+
+
+
+Gustavo vídeo: https://youtu.be/W1ydQsqss8A
